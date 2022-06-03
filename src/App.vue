@@ -1,7 +1,11 @@
 <template>
-  <nav>
+  <div class="app">
     <router-view />
-  </nav>
+  </div>
 </template>
 
-<style lang="less"></style>
+<style lang="less">
+.app {
+  height: 100%;
+}
+</style>
