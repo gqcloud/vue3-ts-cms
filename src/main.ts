@@ -5,4 +5,5 @@ import router from "./router"
 import store from "./store"
 const app = createApp(App)
 // registerApp(app)
+
 app.use(store).use(router).mount("#app")
