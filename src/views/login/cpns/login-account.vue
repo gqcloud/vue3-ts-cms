@@ -1,6 +1,6 @@
 <template>
   <div class="loginAccount">
-    <el-form label-width="60px" :rules="rules" :model="account">
+    <el-form ref="formRef" label-width="60px" :rules="rules" :model="account">
       <el-form-item label="账号" prop="name">
         <el-input v-model="account.name" />
       </el-form-item>
@@ -11,38 +11,42 @@
   </div>
 </template>
 
-<script>
-import { defineComponent, reactive } from "vue"
+<script lang="ts">
+import { defineComponent, reactive, ref } from "vue"
+import { useStore } from "vuex"
+
+import { rules } from "../config/account-config"
+import LocalCache from "@/utils/cache"
+import { ElForm } from "element-plus/lib/components"
+
 export default defineComponent({
   setup() {
+    const store = useStore()
     const account = reactive({
-      name: "",
-      password: ""
+      name: LocalCache.getCache("name") ?? "",
+      password: LocalCache.getCache("password") ?? ""
     })
+    const formRef = ref<InstanceType<typeof ElForm>>()
+    const loginAction = (isKeepPassword: boolean) => {
+      formRef.value?.validate((valid) => {
+        if (valid) {
+          if (isKeepPassword) {
+            LocalCache.setCache("name", account.name)
+            LocalCache.setCache("password", account.password)
+          } else {
+            LocalCache.deleteCache("name")
+            LocalCache.deleteCache("password")
+          }
 
-    const rules = {
-      name: [
-        { required: true, message: "用户名是必传内容", trigger: "blur" },
-        {
-          pattern: /^[a-z0-9]{5,10}$/,
-          required: true,
-          message: "用户名必须是5-10位",
-          trigger: "blur"
+          store.dispatch("login/accountLoginAction", { ...account })
         }
-      ],
-      password: [
-        { required: true, message: "密码是必传内容", trigger: "blur" },
-        {
-          pattern: /^[a-z0-9]{4,}$/,
-          required: true,
-          message: "密码必须是4位以上",
-          trigger: "blur"
-        }
-      ]
+      })
     }
     return {
       account,
-      rules
+      rules,
+      loginAction,
+      formRef
     }
   }
 })
