@@ -4,6 +4,8 @@ const Login = () =>
   import(/* webpackChunkName: "login" */ "../views/login/login.vue")
 const Main = () =>
   import(/* webpackChunkName: "main" */ "../views/main/main.vue")
+const NotFound = () =>
+  import(/* webpackChunkName: "main" */ "../views/notfound/notFound.vue")
 
 const routes: Array<RouteRecordRaw> = [
   {
@@ -19,6 +21,11 @@ const routes: Array<RouteRecordRaw> = [
     path: "/main",
     name: "main",
     component: Main
+  },
+  {
+    path: "/:pathMatch(.*)*",
+    name: "notfound",
+    component: NotFound
   }
 ]
 
