@@ -49,12 +49,23 @@ const loginModule: Module<ILoginState, IRootState> = {
       const userMenus = userMenuResult.data
       commit("changeUserMenus", userMenus)
       LocalCache.setCache("userMenus", userMenus)
-      router.push({
-        path: "/main"
-      })
+      router.push("/main")
+    },
+    loadLocalLogin({ commit }) {
+      const token = LocalCache.getCache("token")
+      if (token) {
+        commit("changeToken", token)
+      }
+      const userinfo = LocalCache.getCache("userinfo")
+      if (userinfo) {
+        commit("changeUserInfo", userinfo)
+      }
+      const userMenus = LocalCache.getCache("userMenus")
+      if (userMenus) {
+        commit("changeUserMenus", userMenus)
+      }
     }
-  },
-  modules: {}
+  }
 }
 
 export default loginModule

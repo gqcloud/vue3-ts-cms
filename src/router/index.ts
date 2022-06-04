@@ -8,8 +8,7 @@ const Main = () =>
 const routes: Array<RouteRecordRaw> = [
   {
     path: "/",
-    name: "main",
-    component: Main
+    redirect: "/main"
   },
   {
     path: "/login",
