@@ -1,22 +1,29 @@
 <template>
   <div class="user">
-    <div class="search">
-      <hy-form v-bind="searchFromConfig"></hy-form>
-    </div>
+    <page-search :searchFromConfig="searchFromConfig"></page-search>
   </div>
 </template>
 
 <script lang="ts">
+import pageSearch from "@/components/page-search/src/page-search.vue"
 import { defineComponent } from "vue"
-import HyForm from "@/base-ui/form/index"
+
+import { useStore } from "vuex"
 
 import { searchFromConfig } from "./config/search.config"
 export default defineComponent({
+  components: { pageSearch },
   name: "user",
-  components: {
-    HyForm
-  },
+
   setup() {
+    const store = useStore()
+    store.dispatch("system/getPageListAction", {
+      pageUrl: "/users/list",
+      queryInfo: {
+        offset: 0,
+        size: 10
+      }
+    })
     return {
       searchFromConfig
     }
@@ -24,8 +31,4 @@ export default defineComponent({
 })
 </script>
 
-<style scoped lang="less">
-.hy-form {
-  padding-top: 22px;
-}
-</style>
+<style scoped lang="less"></style>
