@@ -1,30 +1,24 @@
 <template>
   <div class="user">
     <page-search :searchFromConfig="searchFromConfig"></page-search>
+    <page-content :contentTabConfig="contentTabConfig"> </page-content>
   </div>
 </template>
 
 <script lang="ts">
-import pageSearch from "@/components/page-search/src/page-search.vue"
 import { defineComponent } from "vue"
-
-import { useStore } from "vuex"
+import pageSearch from "@/components/page-search/index"
+import PageContent from "@/components/page-content/index"
 
 import { searchFromConfig } from "./config/search.config"
+import { contentTabConfig } from "./config/content.config"
 export default defineComponent({
-  components: { pageSearch },
+  components: { pageSearch, PageContent },
   name: "user",
 
   setup() {
-    const store = useStore()
-    store.dispatch("system/getPageListAction", {
-      pageUrl: "/users/list",
-      queryInfo: {
-        offset: 0,
-        size: 10
-      }
-    })
     return {
+      contentTabConfig,
       searchFromConfig
     }
   }

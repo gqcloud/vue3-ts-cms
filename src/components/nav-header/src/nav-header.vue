@@ -14,10 +14,10 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref, computed, watchEffect, watch } from "vue"
+import { defineComponent, ref, computed } from "vue"
 import { useStore } from "@/store"
 import { useRoute } from "vue-router"
-import HyBreadcrumb, { IBreadcrumb } from "@/base-ui/breadcrumb/index"
+import HyBreadcrumb from "@/base-ui/breadcrumb/index"
 import userInfo from "./user-info.vue"
 
 import { pathMapBreadcrumbs } from "@/utils/map-menus"
