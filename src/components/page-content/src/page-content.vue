@@ -1,7 +1,7 @@
 <template>
   <div class="page-content">
     <div class="content">
-      <hy-table :listData="userList" v-bind="contentTabConfig">
+      <hy-table :listData="dataList" v-bind="contentTabConfig">
         <template #status="scope">
           <el-button plain :type="scope.row.enable ? 'success' : 'danger'">{{
             scope.row.enable ? "启用" : "禁用"
@@ -47,25 +47,31 @@ export default defineComponent({
     contentTabConfig: {
       type: Object,
       required: true
+    },
+    pageName: {
+      type: String,
+      required: true
     }
   },
   components: {
     HyTable
   },
-  setup() {
+  setup(props) {
     const store = useStore()
     store.dispatch("system/getPageListAction", {
-      pageUrl: "/users/list",
+      pageName: props.pageName,
       queryInfo: {
         offset: 0,
         size: 10
       }
     })
-    const userList = computed(() => store.state.system.userList)
+    const dataList = computed(() =>
+      store.getters[`system/pageListData`](props.pageName)
+    )
     // const userCount = computed(() => store.state.system.userCount)
 
     return {
-      userList
+      dataList
     }
   }
 })

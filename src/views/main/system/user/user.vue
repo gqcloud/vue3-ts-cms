@@ -1,7 +1,8 @@
 <template>
   <div class="user">
     <page-search :searchFromConfig="searchFromConfig"></page-search>
-    <page-content :contentTabConfig="contentTabConfig"> </page-content>
+    <page-content :contentTabConfig="contentTabConfig" pageName="user">
+    </page-content>
   </div>
 </template>
 
