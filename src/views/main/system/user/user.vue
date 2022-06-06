@@ -1,7 +1,7 @@
 <template>
   <div class="user">
     <page-search :searchFromConfig="searchFromConfig"></page-search>
-    <page-content :contentTabConfig="contentTabConfig" pageName="user">
+    <page-content :contentTabConfig="contentTabConfig" pageName="users">
     </page-content>
   </div>
 </template>
@@ -15,7 +15,7 @@ import { searchFromConfig } from "./config/search.config"
 import { contentTabConfig } from "./config/content.config"
 export default defineComponent({
   components: { pageSearch, PageContent },
-  name: "user",
+  name: "users",
 
   setup() {
     return {
