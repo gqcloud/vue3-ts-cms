@@ -31,7 +31,8 @@ export default defineComponent({
   components: {
     HyForm
   },
-  setup(props) {
+  emits: ["resetBtnClick", "queryBtnClick"],
+  setup(props, { emit }) {
     const formItems = props.searchFromConfig?.formItems ?? []
     const formOriginData: any = {}
     for (const item of formItems) {
@@ -41,9 +42,10 @@ export default defineComponent({
 
     const handleResetClick = () => {
       formData.value = formOriginData
+      emit("resetBtnClick")
     }
     const handleQueryClick = () => {
-      console.log(1)
+      emit("queryBtnClick", formData.value)
     }
     return {
       formData,

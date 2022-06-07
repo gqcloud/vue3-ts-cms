@@ -1,7 +1,15 @@
 <template>
   <div class="user">
-    <page-search :searchFromConfig="searchFromConfig"></page-search>
-    <page-content :contentTabConfig="contentTabConfig" pageName="users">
+    <page-search
+      :searchFromConfig="searchFromConfig"
+      @resetBtnClick="handleResetClick"
+      @queryBtnClick="handleQueryClick"
+    ></page-search>
+    <page-content
+      :contentTabConfig="contentTabConfig"
+      pageName="users"
+      ref="pageContentRef"
+    >
     </page-content>
   </div>
 </template>
@@ -13,14 +21,19 @@ import PageContent from "@/components/page-content/index"
 
 import { searchFromConfig } from "./config/search.config"
 import { contentTabConfig } from "./config/content.config"
+
+import { usePageSearch } from "@/hooks/usePageSearch"
 export default defineComponent({
   components: { pageSearch, PageContent },
   name: "users",
-
   setup() {
+    const [pageContentRef, handleResetClick, handleQueryClick] = usePageSearch()
     return {
+      pageContentRef,
       contentTabConfig,
-      searchFromConfig
+      searchFromConfig,
+      handleResetClick,
+      handleQueryClick
     }
   }
 })
