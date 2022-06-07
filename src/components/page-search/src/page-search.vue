@@ -5,10 +5,10 @@
         <template #header> <h1 class="header">高级检索</h1> </template>
         <template #footer>
           <div class="handleBtns">
-            <el-button type="primary"
+            <el-button type="primary" @click="handleQueryClick"
               ><el-icon><Search /></el-icon>搜索</el-button
             >
-            <el-button
+            <el-button @click="handleResetClick"
               ><el-icon><Refresh /></el-icon>重置</el-button
             >
           </div>
@@ -31,15 +31,24 @@ export default defineComponent({
   components: {
     HyForm
   },
-  setup() {
-    const formData = ref({
-      id: "",
-      name: "",
-      password: "",
-      createTime: ""
-    })
+  setup(props) {
+    const formItems = props.searchFromConfig?.formItems ?? []
+    const formOriginData: any = {}
+    for (const item of formItems) {
+      formOriginData[item.field] = ""
+    }
+    const formData = ref(formOriginData)
+
+    const handleResetClick = () => {
+      formData.value = formOriginData
+    }
+    const handleQueryClick = () => {
+      console.log(1)
+    }
     return {
-      formData
+      formData,
+      handleResetClick,
+      handleQueryClick
     }
   }
 })
