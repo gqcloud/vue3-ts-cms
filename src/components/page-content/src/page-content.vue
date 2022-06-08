@@ -1,7 +1,12 @@
 <template>
   <div class="page-content">
     <div class="content">
-      <hy-table :listData="dataList" v-bind="contentTabConfig">
+      <hy-table
+        :listData="dataList"
+        :listCount="dataCount"
+        v-bind="contentTabConfig"
+        v-model:page="pageInfo"
+      >
         <template #status="scope">
           <el-button plain :type="scope.row.enable ? 'success' : 'danger'">{{
             scope.row.enable ? "启用" : "禁用"
@@ -37,7 +42,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, computed } from "vue"
+import { defineComponent, computed, ref, watch } from "vue"
 
 import HyTable from "@/base-ui/table/index"
 
@@ -58,12 +63,14 @@ export default defineComponent({
   },
   setup(props) {
     const store = useStore()
+    const pageInfo = ref({ currentPage: 0, pageSize: 10 })
+    watch(pageInfo, () => getPageData())
     const getPageData = (queryInfo: any = {}) => {
       store.dispatch("system/getPageListAction", {
         pageName: props.pageName,
         queryInfo: {
-          offset: 0,
-          size: 10,
+          offset: pageInfo.value.currentPage * pageInfo.value.pageSize,
+          size: pageInfo.value.pageSize,
           ...queryInfo
         }
       })
@@ -72,10 +79,15 @@ export default defineComponent({
     const dataList = computed(() =>
       store.getters[`system/pageListData`](props.pageName)
     )
+    const dataCount = computed(() =>
+      store.getters[`system/pageListCount`](props.pageName)
+    )
     // const userCount = computed(() => store.state.system.userCount)
 
     return {
       dataList,
+      dataCount,
+      pageInfo,
       getPageData
     }
   }

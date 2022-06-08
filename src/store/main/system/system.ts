@@ -19,6 +19,11 @@ const systemModule: Module<ISystemState, IRootState> = {
       return (pageName: string) => {
         return (state as any)[`${pageName}List`]
       }
+    },
+    pageListCount(state) {
+      return (pageName: string) => {
+        return (state as any)[`${pageName}Count`]
+      }
     }
   },
   mutations: {
@@ -39,16 +44,6 @@ const systemModule: Module<ISystemState, IRootState> = {
     async getPageListAction({ commit }, payload: any) {
       const pageName = payload.pageName
       const pageUrl = `/${pageName}/list`
-      // switch (pageName) {
-      //   case "users":
-      //     pageUrl = "/users/list"
-      //     break
-      //   case "role":
-      //     pageUrl = "/role/list"
-      //     break
-      //   default:
-      //     break
-      // }
 
       const pageResult = await getPageListData(pageUrl, payload.queryInfo)
       console.log(pageResult)
@@ -59,20 +54,6 @@ const systemModule: Module<ISystemState, IRootState> = {
         pageName.slice(0, 1).toUpperCase() + pageName.slice(1)
       commit(`change${changePageName}List`, list)
       commit(`change${changePageName}Count`, totalCount)
-      // switch (pageName) {
-      //   case "users":
-      //     commit(`changeUserList`, list)
-      //     commit(`changeUserCount`, totalCount)
-      //     break
-      //   case "role":
-      //     commit(`changeRoleList`, list)
-      //     commit(`changeRoleCount`, totalCount)
-      //     break
-      //   default:
-      //     break
-      // }
-      // commit(`change${pageName}List`, list)
-      // commit(`change${pageName}Count`, totalCount)
     }
   }
 }
