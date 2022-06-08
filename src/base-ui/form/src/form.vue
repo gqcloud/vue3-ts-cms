@@ -1,7 +1,7 @@
 <template>
   <div class="hy-form">
     <div class="header">
-      <slot name="header">默认名称</slot>
+      <slot name="header"></slot>
     </div>
     <el-form :label-width="labelWidth">
       <el-row>
@@ -48,7 +48,7 @@
       </el-row>
     </el-form>
     <div class="footer">
-      <slot name="footer">默认内容</slot>
+      <slot name="footer"></slot>
     </div>
   </div>
 </template>

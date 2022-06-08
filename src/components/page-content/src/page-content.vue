@@ -18,12 +18,22 @@
         <template #updateAt="scope">
           <span>{{ $formatTime.formatTime(scope.row.updateAt) }}</span>
         </template>
-        <template #handler>
+        <template #handler="scope">
           <div class="handel-btns">
-            <el-button size="small" text type="primary" v-if="isUpdate"
+            <el-button
+              size="small"
+              text
+              type="primary"
+              v-if="isUpdate"
+              @click="handleEditClick(scope.row)"
               ><el-icon><Edit /></el-icon>编辑</el-button
             >
-            <el-button size="small" type="danger" text v-if="isDelete"
+            <el-button
+              size="small"
+              type="danger"
+              text
+              v-if="isDelete"
+              @click="handleDeleteClick(scope.row)"
               ><el-icon><Delete /></el-icon>删除</el-button
             >
           </div>
@@ -31,7 +41,9 @@
 
         <template #header></template>
         <template #headerHandler>
-          <el-button type="primary" v-if="isCreate">新建用户</el-button>
+          <el-button type="primary" v-if="isCreate" @click="handleNewClick"
+            >新建用户</el-button
+          >
           <el-button
             ><el-icon><Refresh /></el-icon
           ></el-button>
@@ -73,20 +85,22 @@ export default defineComponent({
   components: {
     HyTable
   },
-  setup(props) {
+  emits: ["newBtnClick", "editBtnClick"],
+  setup(props, { emit }) {
     const store = useStore()
     const isCreate = usePermission(props.pageName, "create")
     const isUpdate = usePermission(props.pageName, "update")
     const isDelete = usePermission(props.pageName, "delete")
     const isQuery = usePermission(props.pageName, "query")
-    const pageInfo = ref({ currentPage: 0, pageSize: 10 })
+
+    const pageInfo = ref({ currentPage: 1, pageSize: 10 })
     watch(pageInfo, () => getPageData())
     const getPageData = (queryInfo: any = {}) => {
       if (!isQuery) return
       store.dispatch("system/getPageListAction", {
         pageName: props.pageName,
         queryInfo: {
-          offset: pageInfo.value.currentPage * pageInfo.value.pageSize,
+          offset: (pageInfo.value.currentPage - 1) * pageInfo.value.pageSize,
           size: pageInfo.value.pageSize,
           ...queryInfo
         }
@@ -109,6 +123,20 @@ export default defineComponent({
         return true
       }
     )
+
+    const handleDeleteClick = (item: any) => {
+      store.dispatch("system/deletePageDataAction", {
+        pageName: props.pageName,
+        id: item.id
+      })
+    }
+
+    const handleEditClick = (item: any) => {
+      emit("editBtnClick", item)
+    }
+    const handleNewClick = () => {
+      emit("newBtnClick")
+    }
     return {
       dataList,
       dataCount,
@@ -117,7 +145,10 @@ export default defineComponent({
       getPageData,
       isCreate,
       isUpdate,
-      isDelete
+      isDelete,
+      handleDeleteClick,
+      handleEditClick,
+      handleNewClick
     }
   }
 })
