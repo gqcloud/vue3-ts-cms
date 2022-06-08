@@ -38,8 +38,22 @@ export default defineComponent({
   name: "users",
   setup() {
     const [pageContentRef, handleResetClick, handleQueryClick] = usePageSearch()
+
+    const newCallback = () => {
+      const passwordItem = modalConfig.formItems.find(
+        (item) => item.field === "password"
+      )
+      passwordItem!.isHidden = false
+    }
+    const editCallback = () => {
+      const passwordItem = modalConfig.formItems.find(
+        (item) => item.field === "password"
+      )
+      passwordItem!.isHidden = true
+    }
+
     const [handleNewData, handleEditData, defaultInfo, pageModalRef] =
-      usePageModal()
+      usePageModal(newCallback, editCallback)
     return {
       pageContentRef,
       contentTabConfig,
