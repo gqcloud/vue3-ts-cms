@@ -11,7 +11,11 @@ const systemModule: Module<ISystemState, IRootState> = {
       usersList: [],
       usersCount: 0,
       roleList: [],
-      roleCount: 0
+      roleCount: 0,
+      goodsList: [],
+      goodsCount: 0,
+      menuList: [],
+      menuCount: 0
     }
   },
   getters: {
@@ -38,6 +42,18 @@ const systemModule: Module<ISystemState, IRootState> = {
     },
     changeRoleCount(state, roleCount: number) {
       state.roleCount = roleCount
+    },
+    changeGoodsList(state, goodsList: any[]) {
+      state.goodsList = goodsList
+    },
+    changeGoodsCount(state, goodsCount: number) {
+      state.goodsCount = goodsCount
+    },
+    changeMenuList(state, menuList: any[]) {
+      state.menuList = menuList
+    },
+    changeMenuCount(state, menuCount: number) {
+      state.menuCount = menuCount
     }
   },
   actions: {
@@ -46,7 +62,6 @@ const systemModule: Module<ISystemState, IRootState> = {
       const pageUrl = `/${pageName}/list`
 
       const pageResult = await getPageListData(pageUrl, payload.queryInfo)
-      console.log(pageResult)
 
       const { list, totalCount } = pageResult.data
 
