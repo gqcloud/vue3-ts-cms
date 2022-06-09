@@ -98,6 +98,10 @@ class HYRequest {
     return this.request<T>({ ...config, method: "PUT" })
   }
 
+  patch<T = any>(config: HYRequestConfig<T>): Promise<T> {
+    return this.request<T>({ ...config, method: "PATCH" })
+  }
+
   delete<T = any>(config: HYRequestConfig<T>): Promise<T> {
     return this.request<T>({ ...config, method: "DELETE" })
   }

@@ -5,9 +5,7 @@
       <template #footer>
         <span class="dialog-footer">
           <el-button @click="dialogVisible = false">取消</el-button>
-          <el-button type="primary" @click="dialogVisible = false"
-            >确定</el-button
-          >
+          <el-button type="primary" @click="handleConfirmClick">确定</el-button>
         </span>
       </template>
     </el-dialog>
@@ -17,6 +15,7 @@
 <script lang="ts">
 import { defineComponent, ref, watch } from "vue"
 import HyForm from "@/base-ui/form/index"
+import { useStore } from "vuex"
 export default defineComponent({
   props: {
     modalConfig: {
@@ -26,6 +25,10 @@ export default defineComponent({
     defaultInfo: {
       type: Object,
       default: () => ({})
+    },
+    pageName: {
+      type: String,
+      required: true
     }
   },
   components: {
@@ -43,9 +46,28 @@ export default defineComponent({
         }
       }
     )
+
+    const store = useStore()
+    const handleConfirmClick = () => {
+      dialogVisible.value = false
+      if (Object.keys(props.defaultInfo).length) {
+        store.dispatch("system/editPageDataAction", {
+          pageName: props.pageName,
+          editData: { ...formData.value },
+          id: props.defaultInfo.id
+        })
+      } else {
+        store.dispatch("system/createPageDataAction", {
+          pageName: props.pageName,
+          newData: { ...formData.value }
+        })
+      }
+      console.log(1)
+    }
     return {
       dialogVisible,
-      formData
+      formData,
+      handleConfirmClick
     }
   }
 })

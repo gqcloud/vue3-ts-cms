@@ -16,13 +16,14 @@
     <page-modal
       ref="pageModalRef"
       :defaultInfo="defaultInfo"
-      :modalConfig="modalConfig"
+      :modalConfig="modalConfigRef"
+      pageName="users"
     ></page-modal>
   </div>
 </template>
 
 <script lang="ts">
-import { defineComponent } from "vue"
+import { defineComponent, computed } from "vue"
 import pageSearch from "@/components/page-search/index"
 import PageContent from "@/components/page-content/index"
 import PageModal from "@/components/page-modal/index"
@@ -33,6 +34,7 @@ import { modalConfig } from "./config/modal.config"
 
 import { usePageSearch } from "@/hooks/usePageSearch"
 import { usePageModal } from "@/hooks/usePageModal"
+import { useStore } from "@/store"
 export default defineComponent({
   components: { pageSearch, PageContent, PageModal },
   name: "users",
@@ -52,6 +54,23 @@ export default defineComponent({
       passwordItem!.isHidden = true
     }
 
+    const store = useStore()
+    const modalConfigRef = computed(() => {
+      const departmentItem = modalConfig.formItems.find(
+        (item) => item.field === "departmentId"
+      )
+      departmentItem!.options = store.state.entireDepartment.map((item) => {
+        return { title: item.name, value: item.id }
+      })
+      const roleItem = modalConfig.formItems.find(
+        (item) => item.field === "roleId"
+      )
+      roleItem!.options = store.state.entireRole.map((item) => {
+        return { title: item.name, value: item.id }
+      })
+      return modalConfig
+    })
+
     const [handleNewData, handleEditData, defaultInfo, pageModalRef] =
       usePageModal(newCallback, editCallback)
     return {
@@ -64,7 +83,8 @@ export default defineComponent({
       pageModalRef,
       defaultInfo,
       handleNewData,
-      handleEditData
+      handleEditData,
+      modalConfigRef
     }
   }
 })
