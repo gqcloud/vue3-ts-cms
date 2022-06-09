@@ -9,7 +9,7 @@
       </span>
       <template #dropdown>
         <el-dropdown-menu>
-          <el-dropdown-item
+          <el-dropdown-item @click="handleExitClick"
             ><el-icon><RemoveFilled /></el-icon>退出登录</el-dropdown-item
           >
           <el-dropdown-item divided
@@ -26,9 +26,18 @@
 
 <script lang="ts">
 import { defineComponent } from "vue"
+import { useRouter } from "vue-router"
+import LocalCache from "@/utils/cache"
 export default defineComponent({
   setup() {
-    return {}
+    const router = useRouter()
+    const handleExitClick = () => {
+      LocalCache.deleteCache("token")
+      router.push("/main")
+    }
+    return {
+      handleExitClick
+    }
   }
 })
 </script>
