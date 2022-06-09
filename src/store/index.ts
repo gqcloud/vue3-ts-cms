@@ -3,6 +3,7 @@ import { IRootState, IStoreType } from "./type"
 
 import login from "./login/login"
 import system from "./main/system/system"
+import dashboard from "./main/anaylysis/dashboard"
 
 import { getPageListData } from "@/service/main/system/system"
 const store = createStore<IRootState>({
@@ -11,7 +12,8 @@ const store = createStore<IRootState>({
       name: "code",
       age: 18,
       entireDepartment: [],
-      entireRole: []
+      entireRole: [],
+      entireMenu: []
     }
   },
   getters: {},
@@ -21,6 +23,9 @@ const store = createStore<IRootState>({
     },
     changeEntireRole(state, list) {
       state.entireRole = list
+    },
+    changeEntireMenu(state, list) {
+      state.entireMenu = list
     }
   },
   actions: {
@@ -35,13 +40,17 @@ const store = createStore<IRootState>({
         size: 1000
       })
       const { list: roleList } = roleResult.data
+      const menuResult = await getPageListData("/menu/list", {})
+      const { list: menuList } = menuResult.data
       commit("changeEntireDepartment", departmentList)
       commit("changeEntireRole", roleList)
+      commit("changeEntireMenu", menuList)
     }
   },
   modules: {
     login,
-    system
+    system,
+    dashboard
   }
 })
 
